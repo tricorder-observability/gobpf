@@ -227,7 +227,9 @@ func (bpf *Module) load(name string, progType int, logLevel, logSize uint) (int,
 		logBuf = make([]byte, logSize)
 		logBufP = (*C.char)(unsafe.Pointer(&logBuf[0]))
 	}
-	fd, err := C.bcc_func_load(bpf.p, C.int(uint32(progType)), nameCS, start, size, license, version, C.int(logLevel), logBufP, C.uint(len(logBuf)), nil)
+	// -1 means to skip attach type check.
+	expAttachType := C.int(-1)
+	fd, err := C.bcc_func_load(bpf.p, C.int(uint32(progType)), nameCS, start, size, license, version, C.int(logLevel), logBufP, C.uint(len(logBuf)), nil, expAttachType)
 	if fd < 0 {
 		return -1, fmt.Errorf("error loading BPF program: %v", err)
 	}
