@@ -1,3 +1,3 @@
-module github.com/iovisor/gobpf
+module github.com/tricorder-observability/gobpf
 
 go 1.15
