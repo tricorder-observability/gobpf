@@ -175,7 +175,10 @@ func InitPerfMapWithPageCnt(table *Table, receiverChan chan []byte, lostChan cha
 	return &PerfMap{
 		table,
 		readers,
-		make(chan bool),
+		// Buffered channel so that writing into channel would never be blocked.
+		// Otherwise, PerfMap.Stop() would be blocked and the process hangs if the PerfMap
+		// is busy polling.
+		make(chan bool, 10),
 	}, nil
 }
 
