@@ -202,6 +202,9 @@ func (pm *PerfMap) poll(timeout int) {
 		case <-pm.stop:
 			return
 		default:
+			// TODO(yaxiong): Expose this as public API so users can determine the polling frequency
+			// directly, and remove the goroutine started by Start(), which potentially wastes CPU
+			// cycles.
 			C.perf_reader_poll(C.int(len(pm.readers)), &pm.readers[0], C.int(timeout))
 		}
 	}
