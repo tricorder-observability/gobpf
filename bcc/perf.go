@@ -17,6 +17,7 @@ package bcc
 import (
 	"encoding/binary"
 	"fmt"
+	"log"
 	"sync"
 	"unsafe"
 
@@ -90,6 +91,7 @@ func lookupCallback(i uint64) *callbackData {
 // stub in C that should be called."
 //export rawCallback
 func rawCallback(cbCookie unsafe.Pointer, raw unsafe.Pointer, rawSize C.int) {
+	log.Printf("rawCallback, rawSize=%d", int(rawSize))
 	callbackData := lookupCallback(uint64(uintptr(cbCookie)))
 	callbackData.receiverChan <- C.GoBytes(raw, rawSize)
 }
